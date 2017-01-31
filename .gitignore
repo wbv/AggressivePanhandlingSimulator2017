@@ -1,0 +1,15 @@
+*.pdb
+/aps2017/bin/Debug/WpfApplication1.vshost.exe.manifest
+/aps2017/bin/Debug/WpfApplication1.vshost.exe.config
+/aps2017/bin/Debug/WpfApplication1.vshost.exe
+/aps2017/bin/Debug/WpfApplication1.exe.config
+/aps2017/bin/Debug/WpfApplication1.exe
+/aps2017/bin/Debug/AggressivePanhandlingSimulator2017.vshost.exe.manifest
+/aps2017/bin/Debug/AggressivePanhandlingSimulator2017.vshost.exe.config
+/aps2017/bin/Debug/AggressivePanhandlingSimulator2017.vshost.exe
+/aps2017/bin/Release/AggressivePanhandlingSimulator2017.vshost.exe.manifest
+/aps2017/bin/Release/AggressivePanhandlingSimulator2017.vshost.exe.config
+/aps2017/bin/Release/AggressivePanhandlingSimulator2017.vshost.exe
+/aps2017/bin/Debug/AggressivePanhandlingSimulator2017.exe.config
+/aps2017/bin/Debug/AggressivePanhandlingSimulator2017.exe
+/aps2017/obj

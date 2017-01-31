@@ -1,0 +1,48 @@
+﻿
+<Window x:Class="WpfApplication1.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:WpfApplication1"
+    mc:Ignorable="d"
+    Title="Aggressive Panhandling Simulator 2017" Height="512" Width="512"
+    ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" 
+                      BorderThickness="1"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter Margin="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>    
+    
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Name="InfoLabel" FontSize="48px" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0">Pick a cup</TextBlock>
+        <DockPanel HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
+            <Button Name="Cup1" Height="128px" Width="64px" FontSize="32px" Margin="32px" Click="Cup1_Clicked">1</Button>
+            <Button Name="Cup2" Height="128px" Width="64px" FontSize="32px" Margin="32px" Click="Cup2_Clicked">2</Button>
+            <Button Name="Cup3" Height="128px" Width="64px" FontSize="32px" Margin="32px" Click="Cup3_Clicked">3</Button>
+        </DockPanel>
+    </Grid>
+</Window>
