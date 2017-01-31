@@ -116,7 +116,7 @@ namespace WpfApplication1
 				cups[i].Background = blankCupColor;
 			//UpdateLayout();
 
-			winningCup = rng.Next(2);
+			winningCup = rng.Next(3);
 		}
 		
 		private void Cup1_Clicked(object sender, RoutedEventArgs e)
