@@ -1,4 +1,5 @@
 *.pdb
+*.suo
 /aps2017/bin/Debug/WpfApplication1.vshost.exe.manifest
 /aps2017/bin/Debug/WpfApplication1.vshost.exe.config
 /aps2017/bin/Debug/WpfApplication1.vshost.exe
