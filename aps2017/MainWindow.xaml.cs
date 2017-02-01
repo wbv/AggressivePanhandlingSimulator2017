@@ -1,41 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace WpfApplication1
+namespace AggressivePanhandlingSimulator2017
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public Random rng;
-		public int winningCup;
-		public Button[] cups;
+		private Random rng;
+		private int winningCup;
+		private Button[] cups;
+		private uint streak;
+		private uint maxStreak;
 
-		public SolidColorBrush fgColor;
-		public SolidColorBrush bgColor;
-		public SolidColorBrush winningCupColor;
-		public SolidColorBrush wrongCupColor;
-		public SolidColorBrush blankCupColor;
+		public SolidColorBrush AppForegroundColor;
+		public SolidColorBrush AppBackgroundColor;
+		public SolidColorBrush CupWinColor;
+		public SolidColorBrush CupWinDarkColor;
+		public SolidColorBrush CupLoseColor;
+		public SolidColorBrush CupLoseDarkColor;
+		public SolidColorBrush CupDefaultColor;
 		
 		public volatile bool gameTransition;
 		private delegate void delegater(bool arg);
 
 		private const string GamePrompt = "Pick a cup.";
+		private const string GamePromptAfterWin = "Push your luck.";
 		private const string GameWinPrompt = "Nice.";
 		private const string GameLossPrompt = "Bummer.";
 
@@ -43,78 +36,32 @@ namespace WpfApplication1
 		{
 			InitializeComponent();
 
-			fgColor = new SolidColorBrush(
-			              new Color {
-							  R = 106,
-							  G = 120,
-							  B = 132,
-							  A = byte.MaxValue
-						  }
-			);
-
-			bgColor = new SolidColorBrush(
-						  new Color
-						  {
-							  R = 220,
-							  G = 234,
-							  B = 249,
-							  A = byte.MaxValue
-						  }
-			);
-
-			winningCupColor = new SolidColorBrush(
-						  new Color
-						  {
-							  R = 34,
-							  G = 177,
-							  B = 76,
-							  A = byte.MaxValue
-						  }
-			);
-
-			wrongCupColor = new SolidColorBrush(
-						  new Color
-						  {
-							  R = 149,
-							  G = 64,
-							  B = 64,
-							  A = byte.MaxValue
-						  }
-			);
-
-			blankCupColor = new SolidColorBrush(
-						  new Color
-						  {
-							  R = 149,
-							  G = 149,
-							  B = 149,
-							  A = byte.MaxValue
-						  }
-			);
-
-			Foreground = fgColor;
-			Background = bgColor;
+			AppForegroundColor = new SolidColorBrush((Color)FindResource("AppForegroundColor"));
+			AppBackgroundColor = new SolidColorBrush((Color)FindResource("AppBackgroundColor"));
+			CupWinColor		   = new SolidColorBrush((Color)FindResource("CupWinColor"));
+			CupWinDarkColor    = new SolidColorBrush((Color)FindResource("CupWinDarkColor"));
+			CupLoseColor       = new SolidColorBrush((Color)FindResource("CupLoseColor"));
+			CupLoseDarkColor   = new SolidColorBrush((Color)FindResource("CupLoseDarkColor"));
+			CupDefaultColor    = new SolidColorBrush((Color)FindResource("CupDefaultColor"));
 
 			rng = new Random();
 			cups = new Button[] { Cup1, Cup2, Cup3 };
 
-			foreach (var cup in cups)
-			{
-				//cup.;
-			}
-
 			gameTransition = false;
-
+			streak = 0;
 			NewGame(false);
 		}
 
 		public void NewGame(bool wonlasttime)
 		{
-			InfoLabel.Text = GamePrompt;
+			InfoLabel.Text = wonlasttime ? GamePromptAfterWin : GamePrompt;
 
-			for (int i = 0; i < cups.Count(); i++)
-				cups[i].Background = blankCupColor;
-			//UpdateLayout();
+			for (int i = 0; i < cups.Length; i++)
+			{
+				cups[i].Background = CupDefaultColor;
+				cups[i].Foreground = AppForegroundColor;
+				cups[i].BorderBrush = AppForegroundColor;
+			}
 
 			winningCup = rng.Next(3);
 		}
@@ -139,14 +86,26 @@ namespace WpfApplication1
 			if (gameTransition) // ignore buttons if game has just been played
 				return;
 
+			// UI updates to show the play
 			RevealCups();
 			InfoLabel.Text = (win ? GameWinPrompt : GameLossPrompt);
-			gameTransition = true;
+			if (win)
+				streak++;
+			else
+				streak = 0;
 
+			maxStreak = Math.Max(streak, maxStreak);
+
+			StreakLabel.Text = "Win Streak: " + streak;
+			BestStreakLabel.Text = "Best: " + maxStreak;
+
+			gameTransition = true; 
+
+			// force a render of the UI
 			Application.Current.Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
 
+			// start a task which will reset the UI after 2 seconds
 			var startnextgame = new delegater(NewGame);
-
 			Task.Run(() =>
 			{
 				Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -157,13 +116,20 @@ namespace WpfApplication1
 
 		private void RevealCups()
 		{
-			for (int i = 0; i < cups.Count(); i++)
+			for (int i = 0; i < cups.Length; i++)
 			{
 				if (i == winningCup)
-					cups[i].Background = winningCupColor;
+				{ 
+					cups[i].Background = CupWinColor;
+					cups[i].Foreground = CupWinDarkColor;
+					cups[i].BorderBrush = CupWinDarkColor;
+				}
 				else
-					cups[i].Background = wrongCupColor;
-
+				{
+					cups[i].Background = CupLoseColor;
+					cups[i].Foreground = CupLoseDarkColor;
+					cups[i].BorderBrush = CupLoseDarkColor;
+				}
 			}
 		}
 	}
