@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,9 +24,10 @@ namespace AggressivePanhandlingSimulator2017
 		public SolidColorBrush CupDefaultColor;
 		
 		public volatile bool gameTransition;
-		private delegate void delegater(bool arg);
+        private delegate void gameThreadUpdateOneArg(bool arg);
+        private delegate void gameThreadUpdateNoArg();
 
-		private const string GamePrompt = "Pick a cup.";
+        private const string GamePrompt = "Pick a cup.";
 		private const string GamePromptAfterWin = "Push your luck.";
 		private const string GameWinPrompt = "Nice.";
 		private const string GameLossPrompt = "Bummer.";
@@ -99,19 +99,15 @@ namespace AggressivePanhandlingSimulator2017
 			StreakLabel.Text = "Win Streak: " + streak;
 			BestStreakLabel.Text = "Best: " + maxStreak;
 
-			gameTransition = true; 
+			gameTransition = true;
 
-			// force a render of the UI
-			Application.Current.Dispatcher.Invoke(() => { }, DispatcherPriority.Render);
+            // force a render of the UI
+            gameThreadUpdateNoArg g = () => { };
+			Application.Current.Dispatcher.Invoke( DispatcherPriority.Render, g);
 
 			// start a task which will reset the UI after 2 seconds
-			var startnextgame = new delegater(NewGame);
-			Task.Run(() =>
-			{
-				Thread.Sleep(TimeSpan.FromSeconds(2));
-				gameTransition = false;
-				Application.Current.Dispatcher.Invoke(startnextgame, win);
-			});
+			Thread newthread = new Thread(new ParameterizedThreadStart(GameplayTimedThread));
+            newthread.Start();
 		}
 
 		private void RevealCups()
@@ -132,5 +128,24 @@ namespace AggressivePanhandlingSimulator2017
 				}
 			}
 		}
+
+        private void GameplayTimedThread(object win)
+        {
+            gameThreadUpdateOneArg g = NewGame;
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            gameTransition = false;
+            try
+            { 
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Render, g, win);
+            }
+            catch(NullReferenceException)
+            {
+                // ignore nullreferenceexceptions...
+
+                // don't know the proper thing to do, but this only happens
+                // on program exit when the window is closed but this thread 
+                // is still running...
+            }
+        }
 	}
 }

@@ -17,29 +17,6 @@
         <Color x:Key="CupLoseDarkColor"   R="107" G="61"  B="61"  A="255" />
         <Color x:Key="CupDefaultColor"    R="235" G="235" B="235" A="255" />
 
-        <ThicknessKeyFrameCollection x:Key="CupAnimationKeyFrames">
-            <EasingThicknessKeyFrame KeyTime="0:0:0" Value="32,64,32,64">
-                <EasingThicknessKeyFrame.EasingFunction>
-                    <ElasticEase EasingMode="EaseInOut" />
-                </EasingThicknessKeyFrame.EasingFunction>
-            </EasingThicknessKeyFrame>
-            <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="32,0,32,128">
-                <EasingThicknessKeyFrame.EasingFunction>
-                    <ElasticEase EasingMode="EaseInOut" />
-                </EasingThicknessKeyFrame.EasingFunction>
-            </EasingThicknessKeyFrame>
-            <EasingThicknessKeyFrame KeyTime="0:0:1.5" Value="32,0,32,128">
-                <EasingThicknessKeyFrame.EasingFunction>
-                    <ElasticEase EasingMode="EaseInOut" />
-                </EasingThicknessKeyFrame.EasingFunction>
-            </EasingThicknessKeyFrame>
-            <EasingThicknessKeyFrame KeyTime="0:0:2.0" Value="32,64,32,64">
-                <EasingThicknessKeyFrame.EasingFunction>
-                    <ElasticEase EasingMode="EaseInOut" />
-                </EasingThicknessKeyFrame.EasingFunction>
-            </EasingThicknessKeyFrame>
-        </ThicknessKeyFrameCollection>
-
         <Style TargetType="Window">
             <Setter Property="Background">
                 <Setter.Value>
@@ -83,27 +60,6 @@
                     <SolidColorBrush Color="{StaticResource CupDefaultColor}" />
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <EventTrigger RoutedEvent="Button.MouseDown">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ThicknessAnimationUsingKeyFrames
-                                Storyboard.TargetProperty="Margin">
-                                <EasingThicknessKeyFrame KeyTime="0:0:1" Value="32,0,32,128">
-                                    <EasingThicknessKeyFrame.EasingFunction>
-                                        <ElasticEase EasingMode="EaseInOut" />
-                                    </EasingThicknessKeyFrame.EasingFunction>
-                                </EasingThicknessKeyFrame>
-                                <EasingThicknessKeyFrame KeyTime="0:0:2" Value="32,64,32,64">
-                                    <EasingThicknessKeyFrame.EasingFunction>
-                                        <ElasticEase EasingMode="EaseInOut" />
-                                    </EasingThicknessKeyFrame.EasingFunction>
-                                </EasingThicknessKeyFrame>
-                            </ThicknessAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Style.Triggers>
         </Style>
         
         <Style TargetType="TextBlock">
@@ -128,17 +84,13 @@
             <RowDefinition Height="32px"  />
         </Grid.RowDefinitions>
 
-        <TextBlock Name="InfoLabel" FontSize="48px" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3">Pick a cup.</TextBlock>
+        <TextBlock Name="InfoLabel" FontSize="48px" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="3" />
 
         <Button Name="Cup1" Height="128px" Width="64px" FontSize="32px" Margin="32,64,32,64" Click="Cup1_Clicked" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top">1</Button>
         <Button Name="Cup2" Height="128px" Width="64px" FontSize="32px" Margin="32,64,32,64" Click="Cup2_Clicked" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">2</Button>
         <Button Name="Cup3" Height="128px" Width="64px" FontSize="32px" Margin="32,64,32,64" Click="Cup3_Clicked" Grid.Row="1" Grid.Column="2" VerticalAlignment="Top">3</Button>
 
-        <TextBlock Name="StreakLabel" FontSize="24px" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="2" Grid.ColumnSpan="3">
-            Win Streak: 0
-        </TextBlock>
-        <TextBlock Name="BestStreakLabel" FontSize="20px" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="3" Grid.ColumnSpan="3">
-            Best Streak: 0
-        </TextBlock>
+        <TextBlock Name="StreakLabel" FontSize="24px" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="2" Grid.ColumnSpan="3" />
+        <TextBlock Name="BestStreakLabel" FontSize="20px" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="3" Grid.ColumnSpan="3" />
     </Grid>
 </Window>
