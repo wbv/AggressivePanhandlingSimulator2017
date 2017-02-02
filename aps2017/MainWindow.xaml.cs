@@ -140,11 +140,9 @@ namespace AggressivePanhandlingSimulator2017
             }
             catch(NullReferenceException)
             {
-                // ignore nullreferenceexceptions...
-
                 // don't know the proper thing to do, but this only happens
                 // on program exit when the window is closed but this thread 
-                // is still running...
+                // is still running... So I'm just ignoring them right now.
             }
         }
 	}
